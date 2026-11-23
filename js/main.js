@@ -44,97 +44,116 @@
     const mode = el.dataset.split;
     const units = [];
     splitNode(el, mode, units);
-    const step = mode === "chars" ? 0.055 : 0.13;
+    // optional per-letter spacing fixes (px), measured against the reference
+    el.querySelectorAll("[data-kern]").forEach((line) => {
+      const k = line.dataset.kern.split(",").map(Number);
+      line.querySelectorAll(".split-u").forEach((u, i) => { if (k[i]) u.style.marginLeft = `${k[i]}px`; });
+    });
+    // timings measured from the reference video
+    const step = mode === "chars" ? 0.06 : 0.1;
     units.forEach((u, i) => { u.style.transitionDelay = `${(i * step).toFixed(3)}s`; });
   });
 
   /* ---------------------------------------------------------
      2. Reveal on scroll
+     An element reveals ~0.95s after it (or its trigger) is fully
+     in view — the same cadence as the reference video.
      --------------------------------------------------------- */
+  const REVEAL_DELAY = 950;
   document.querySelectorAll(".card__media img, .guidance img, .plan-detail__img, .footer__imgs img")
     .forEach((img) => img.setAttribute("data-zoom", ""));
 
+  const reveal = (el) => {
+    if (el.classList.contains("in")) return;
+    el.classList.add("in");
+  };
+  const triggers = new Map(); // trigger element -> [{el, delay}]
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
-      e.target.classList.add("in");
-      if (e.target.matches("[data-count]")) rollNumber(e.target);
       io.unobserve(e.target);
+      (triggers.get(e.target) || []).forEach(({ el, delay }) => {
+        setTimeout(() => reveal(el), reduce ? 0 : delay);
+      });
     });
-  }, { threshold: 0.25, rootMargin: "0px 0px -8% 0px" });
+  }, { threshold: 0.99 });
+  const watch = (el, trigger = el, delay = REVEAL_DELAY) => {
+    if (!triggers.has(trigger)) { triggers.set(trigger, []); io.observe(trigger); }
+    triggers.get(trigger).push({ el, delay });
+  };
 
-  document.querySelectorAll("[data-split]:not(.hero__title), [data-zoom], [data-count]")
-    .forEach((el) => io.observe(el));
+  document.querySelectorAll("[data-split]:not(.hero__title)").forEach((el) => watch(el));
+  // images ease out of their zoom as soon as a good part of them is visible
+  // (they are scaled inside overflow:hidden, so they never reach 99%)
+  const zoomIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      zoomIO.unobserve(e.target);
+      reveal(e.target);
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll("[data-zoom]").forEach((el) => zoomIO.observe(el));
+  // counters: 10K+ follows its own box, the other three follow the
+  // "years" box and come in 0.2s apart
+  const members = document.querySelector(".stat--members .stat__num");
+  if (members) watch(members, members.closest(".stat"), 950);
+  const yearsBox = document.querySelector(".stat--years");
+  [".stat--trainers", ".stat--programs", ".stat--years"].forEach((sel, i) => {
+    const n = document.querySelector(`${sel} .stat__num`);
+    if (n && yearsBox) watch(n, yearsBox, 850 + i * 200);
+  });
 
-  // hero headline animates on load
+  // hero headline animates as soon as the page (and its fonts) are ready
   const heroTitle = document.querySelector(".hero__title");
-  const startHero = () => requestAnimationFrame(() => setTimeout(() => heroTitle.classList.add("in"), 250));
+  const startHero = () => requestAnimationFrame(() => heroTitle.classList.add("in"));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(startHero); else startHero();
 
   /* ---------------------------------------------------------
-     3. Rolling counters  (10K+, 25+, 15+, 16+)
+     3. Stat numbers (10K+, 25+, 15+, 16+)
+     Each glyph sits in its own cell: digits get tabular cells
+     like the reference, and "1" is widened to its wider flag.
      --------------------------------------------------------- */
-  function buildRoll(numEl) {
+  function buildCells(numEl) {
     const text = numEl.textContent;
     numEl.textContent = "";
     numEl.setAttribute("aria-label", text);
-    [...text].forEach((ch, idx) => {
-      const roll = document.createElement("span");
-      roll.className = "roll";
-      roll.setAttribute("aria-hidden", "true");
-      const strip = document.createElement("span");
-      const seq = /\d/.test(ch)
-        ? [...Array(10).keys()].map(String).concat([...Array(+ch + 1).keys()].map(String))
-        : [" ", ch];
-      seq.forEach((c) => {
-        const s = document.createElement("span");
-        s.textContent = c;
-        strip.appendChild(s);
-      });
-      strip.dataset.steps = String(seq.length - 1);
-      strip.dataset.ch = ch;
-      strip.style.transitionDelay = `${idx * 0.12}s`;
-      roll.appendChild(strip);
-      numEl.appendChild(roll);
+    [...text].forEach((ch) => {
+      const cell = document.createElement("span");
+      cell.className = "roll";
+      cell.setAttribute("aria-hidden", "true");
+      const inner = document.createElement("span");
+      inner.textContent = ch;
+      inner.dataset.ch = ch;
+      cell.appendChild(inner);
+      numEl.appendChild(cell);
     });
   }
-  function rollNumber(stat) {
-    const numEl = stat.querySelector(".num");
-    numEl.querySelectorAll(".roll > span").forEach((strip) => {
-      const h = strip.firstChild.getBoundingClientRect().height;
-      strip.style.transform = `translateY(-${strip.dataset.steps * h}px)`;
-    });
-  }
-  // size each roll cell
-  function sizeRolls(numEl) {
+  function sizeCells(numEl) {
     const probe = document.createElement("span");
     probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
     numEl.appendChild(probe);
-    // digits use tabular cells (widest digit), other glyphs their own width
     let cell = 0;
     for (let d = 0; d < 10; d++) {
       probe.textContent = String(d);
       cell = Math.max(cell, probe.getBoundingClientRect().width);
     }
-    numEl.querySelectorAll(".roll > span").forEach((strip) => {
-      const ch = strip.dataset.ch;
+    numEl.querySelectorAll(".roll > span").forEach((inner) => {
+      const ch = inner.dataset.ch;
       probe.textContent = ch;
-      const w = /\d/.test(ch) ? cell : probe.getBoundingClientRect().width;
-      strip.parentElement.style.width = `${w}px`;
+      // cell widths kerned to the reference (narrow "1" and "0" cells)
+      const em = parseFloat(getComputedStyle(numEl).fontSize) / 168;
+      const trim = ch === "1" ? 3 : ch === "0" ? 2 : 0;
+      const w = /\d/.test(ch) ? cell - trim * em : probe.getBoundingClientRect().width;
+      inner.parentElement.style.width = `${w}px`;
+      inner.parentElement.classList.toggle("is-one", ch === "1");
     });
     probe.remove();
   }
-  if (!reduce) {
-    document.querySelectorAll("[data-count] .num").forEach(buildRoll);
-    const sizeAll = () => document.querySelectorAll("[data-count] .num").forEach(sizeRolls);
-    sizeAll();
-    if (document.fonts) document.fonts.ready.then(sizeAll);
-    window.addEventListener("resize", sizeAll);
-  }
-  // keep counters correct when breakpoints change glyph height
-  window.addEventListener("resize", () => {
-    document.querySelectorAll("[data-count].in").forEach(rollNumber);
-  });
+  document.querySelectorAll("[data-count] .num").forEach(buildCells);
+  const sizeAll = () => document.querySelectorAll("[data-count] .num").forEach(sizeCells);
+  sizeAll();
+  if (document.fonts) document.fonts.ready.then(sizeAll);
+  window.addEventListener("resize", sizeAll);
 
   /* ---------------------------------------------------------
      4. Travelling dots — hero grid
@@ -243,14 +262,27 @@
     measure();
     window.addEventListener("resize", () => { fill(); measure(); });
     if (reduce) return;
-    let x = m.closest(".logos") ? -150 : -100;
-    let last = performance.now();
+    // phase: the anchor item sits at `anchor-x` (viewport px) `anchor-t` seconds after load
+    const delay = parseFloat(m.dataset.delay) || 0;
+    const anchor = track.children[parseInt(m.dataset.anchor, 10) || 0];
+    const ax = parseFloat(m.dataset.anchorX) || 0;
+    const at = parseFloat(m.dataset.anchorT) || 0;
+    const t0 = 0; // time origin = navigation start
+    let base = 0;
+    const layout = () => {
+      base = ax - m.getBoundingClientRect().left - (anchor.offsetLeft - track.children[0].offsetLeft);
+    };
+    layout();
+    window.addEventListener("resize", layout);
+    if (document.fonts) document.fonts.ready.then(() => { fill(); measure(); layout(); });
+    const posAt = (sec) => {
+      const moving = Math.max(0, sec - delay) - Math.max(0, at - delay);
+      let x = base - speed * moving;
+      if (cycle) { x %= cycle; if (x > 0) x -= cycle; }
+      return x;
+    };
     const tick = (t) => {
-      const dt = Math.min(64, t - last);
-      last = t;
-      x -= (speed * dt) / 1000;
-      if (cycle && -x >= cycle) x += cycle;
-      track.style.transform = `translate3d(${x}px,0,0)`;
+      track.style.transform = `translate3d(${posAt((t - t0) / 1000).toFixed(2)}px,0,0)`;
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GYMTOO — Stronger Everyday</title>
   <meta name="description" content="GYMTOO gym: personal training, strength training, group workouts and memberships built for results.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&family=Saira+Extra+Condensed:wght@600;700&family=Saira:wdth,wght@50..125,400..800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/dm-sans-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/saira-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%230c0c0c%22/%3E%3Ctext x=%2216%22 y=%2223%22 font-family=%22Arial Narrow,Arial%22 font-weight=%22700%22 font-size=%2220%22 text-anchor=%22middle%22 fill=%22%23daff23%22%3EG%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -67,7 +67,7 @@
     <div class="hero__content">
       <p class="tag"><svg><use href="#i-dumbbell"/></svg>Train with purpose</p>
       <h1 class="hero__title" data-split="chars">
-        <span class="ac" style="letter-spacing:.6px;margin-left:2px">Stronger</span><span style="letter-spacing:-.85px;margin-left:-3px">Everyday</span>
+        <span class="ac" style="letter-spacing:2.57px;margin-left:3px" data-kern="0,0,1,3,-2,-1,0,-1">Stronger</span><span data-kern="-1,2,1,2,0,-4,3,-4">Everyday</span>
       </h1>
       <a href="#membership" class="btn">View membership</a>
     </div>
@@ -76,7 +76,7 @@
 
   <!-- ============ LOGOS ============ -->
   <section class="logos" aria-label="Partners">
-    <div class="marquee" data-marquee data-speed="60">
+    <div class="marquee" data-marquee data-speed="72" data-anchor="1" data-anchor-x="307" data-anchor-t="0">
       <div class="marquee__track">
         <img src="assets/img/logo-goodwell.png" alt="Goodwell" width="106" height="32">
         <img src="assets/img/logo-featherdev.png" alt="FeatherDev" width="131" height="32">
@@ -99,7 +99,7 @@
 
           <div class="about__intro">
             <p class="tag"><svg><use href="#i-dumbbell"/></svg>About us</p>
-            <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:-.37px">Train harder, become</span><br><span style="letter-spacing:.19px">Stronger together</span></h2>
+            <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.32px">Train harder, become</span><br><span style="letter-spacing:.75px">Stronger together</span></h2>
             <p class="about__text">We believe fitness is more than just working out—it’s about building strength, confidence, discipline, and a healthier lifestyle. Our gym provides a motivating environment where.</p>
           </div>
 
@@ -133,14 +133,14 @@
         <div class="sec-head">
           <div>
             <p class="tag"><svg><use href="#i-dumbbell"/></svg>Core services</p>
-            <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:-.28px">Everything you need</span><br><span style="letter-spacing:.64px">To get stronger</span></h2>
+            <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.17px">Everything you need</span><br><span style="letter-spacing:1.14px">To get stronger</span></h2>
           </div>
           <a href="#services" class="btn">View all services</a>
         </div>
 
         <div class="cards">
           <article class="card" data-level="1">
-            <header class="card__head"><h3 class="card__title">Personal training</h3><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
+            <header class="card__head"><h3 class="card__title" style="letter-spacing:.5px">Personal training</h3><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
             <div class="card__media"><img src="assets/img/service-personal.jpg" alt="Athlete roaring while lifting dumbbells" width="383" height="412" loading="lazy"></div>
           </article>
           <article class="card" data-level="2">
@@ -148,7 +148,7 @@
             <div class="card__media"><img src="assets/img/service-strength.jpg" alt="Athlete working out with battle ropes" width="383" height="412" loading="lazy"></div>
           </article>
           <article class="card" data-level="3">
-            <header class="card__head"><h3 class="card__title">Group workouts</h3><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
+            <header class="card__head"><h3 class="card__title" style="letter-spacing:.92px">Group workouts</h3><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
             <div class="card__media"><img src="assets/img/service-group.jpg" alt="Trainer guiding a client on the cable machine" width="383" height="412" loading="lazy"></div>
           </article>
         </div>
@@ -162,7 +162,7 @@
         <img class="guidance__small" src="assets/img/guidance-small.jpg" alt="Athlete doing sit-ups" width="209" height="251" loading="lazy">
         <div class="guidance__content">
           <p class="tag"><svg><use href="#i-dumbbell"/></svg>Built for results</p>
-          <h2 class="h2" data-split="words"><span class="ac">Professional guidance<br>and</span> <span style="letter-spacing:.44px">support for every<br>fitness journey</span></h2>
+          <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.6px">Professional guidance<br>and</span> <span style="letter-spacing:1.12px">support for every</span><br><span style="letter-spacing:.64px">fitness journey</span></h2>
           <a href="#membership" class="btn">View programs</a>
         </div>
       </div>
@@ -173,11 +173,11 @@
       <div class="wrap">
         <div class="team__head">
           <p class="tag"><svg><use href="#i-dumbbell"/></svg>Meet our experts</p>
-          <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:-.3px">Meet the team driving</span><br><span style="letter-spacing:-.55px">your transformation</span></h2>
+          <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.45px">Meet the team driving</span><br><span style="letter-spacing:.61px">your transformation</span></h2>
         </div>
         <div class="cards">
           <article class="card trainer" data-level="1">
-            <header class="card__head"><div><h3 class="card__title trainer__name">Ava R. Daniels</h3><p class="trainer__role">Strength coach</p></div><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
+            <header class="card__head"><div><h3 class="card__title trainer__name" style="letter-spacing:.54px">Ava R. Daniels</h3><p class="trainer__role">Strength coach</p></div><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
             <div class="card__media"><img src="assets/img/trainer-ava.jpg" alt="Ava R. Daniels" width="383" height="427" loading="lazy">
               <ul class="trainer__social"><li><a href="#" aria-label="Facebook"><svg><use href="#i-fb"/></svg></a></li><li><a href="#" aria-label="LinkedIn"><svg><use href="#i-in"/></svg></a></li><li><a href="#" aria-label="YouTube"><svg><use href="#i-yt"/></svg></a></li><li><a href="#" aria-label="X"><svg><use href="#i-x"/></svg></a></li></ul>
             </div>
@@ -189,7 +189,7 @@
             </div>
           </article>
           <article class="card trainer" data-level="3">
-            <header class="card__head"><div><h3 class="card__title trainer__name">Eleanor P. Warren</h3><p class="trainer__role">Cardio specialist</p></div><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
+            <header class="card__head"><div><h3 class="card__title trainer__name" style="letter-spacing:.81px">Eleanor P. Warren</h3><p class="trainer__role">Cardio specialist</p></div><i class="sq" aria-hidden="true"><b></b><b></b><b></b></i></header>
             <div class="card__media"><img src="assets/img/trainer-eleanor.jpg" alt="Eleanor P. Warren" width="383" height="427" loading="lazy">
               <ul class="trainer__social"><li><a href="#" aria-label="Facebook"><svg><use href="#i-fb"/></svg></a></li><li><a href="#" aria-label="LinkedIn"><svg><use href="#i-in"/></svg></a></li><li><a href="#" aria-label="YouTube"><svg><use href="#i-yt"/></svg></a></li><li><a href="#" aria-label="X"><svg><use href="#i-x"/></svg></a></li></ul>
             </div>
@@ -204,7 +204,7 @@
         <div class="sec-head sec-head--pricing">
           <div>
             <p class="tag"><svg><use href="#i-dumbbell"/></svg>Core services</p>
-            <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:-.28px">Everything you need</span><br><span style="letter-spacing:.64px">To get stronger</span></h2>
+            <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.17px">Everything you need</span><br><span style="letter-spacing:1.14px">To get stronger</span></h2>
           </div>
           <div class="toggle" role="tablist" aria-label="Billing period">
             <button class="is-on" role="tab" aria-selected="true" data-period="monthly">Monthly</button>
@@ -268,7 +268,7 @@
           <use href="#cta-db" fill="url(#cta-dots)" mask="url(#cta-mask)"/>
         </svg>
         <p class="tag"><svg><use href="#i-dumbbell"/></svg>Core services</p>
-        <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.33px">Let’s build your</span><br><span style="letter-spacing:.2px">stronger future</span></h2>
+        <h2 class="h2" data-split="words"><span class="ac" style="letter-spacing:.53px">Let’s build your</span><br><span style="letter-spacing:.86px">stronger future</span></h2>
         <a href="#membership" class="btn">Book a session</a>
       </div>
     </section>
@@ -280,18 +280,18 @@
       <div class="footer__top">
         <a href="#home" class="logo"><span>GYM</span>TOO</a>
         <div class="footer__contact">
-          <a href="tel:+1234567890" style="letter-spacing:.6px">+1234 567 890</a>
-          <a href="mailto:info@gymtoo.com" style="letter-spacing:-.43px">info@gymtoo.com</a>
+          <a href="tel:+1234567890">+1234 567 890</a>
+          <a href="mailto:info@gymtoo.com">info@gymtoo.com</a>
         </div>
       </div>
       <div class="footer__mid">
         <ul class="footer__nav">
-          <li><a href="#home" style="letter-spacing:-2.33px">Home</a></li>
-          <li><a href="#about" class="is-accent" style="letter-spacing:-.15px">About us</a></li>
-          <li><a href="#services" style="letter-spacing:1.17px">Service</a></li>
-          <li><a href="#trainers" style="letter-spacing:-.3px">Trainers</a></li>
-          <li><a href="#membership" style="letter-spacing:-.78px">Membership</a></li>
-          <li><a href="#contact" style="letter-spacing:1.63px">Contact</a></li>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about" class="is-accent" style="letter-spacing:.71px">About us</a></li>
+          <li><a href="#services" style="letter-spacing:.5px">Service</a></li>
+          <li><a href="#trainers" style="letter-spacing:.14px">Trainers</a></li>
+          <li><a href="#membership" style="letter-spacing:.44px">Membership</a></li>
+          <li><a href="#contact" style="letter-spacing:1px">Contact</a></li>
         </ul>
         <div class="footer__right">
           <ul class="footer__social">
@@ -302,12 +302,12 @@
             <li><a href="#">WhatsApp</a></li>
           </ul>
           <div class="footer__imgs">
-            <div><img src="assets/img/footer-1.jpg" alt="Athlete lifting a dumbbell overhead" width="307" height="329" loading="lazy"></div>
-            <div><img src="assets/img/footer-2.jpg" alt="Athlete training with battle ropes" width="307" height="329" loading="lazy"></div>
+            <div><img src="assets/img/footer-1.jpg" alt="Athlete lifting a dumbbell overhead" width="309" height="331" loading="lazy"></div>
+            <div><img src="assets/img/footer-2.jpg" alt="Athlete training with battle ropes" width="309" height="331" loading="lazy"></div>
           </div>
         </div>
       </div>
-      <div class="footer__marquee marquee" data-marquee data-speed="35" aria-hidden="true">
+      <div class="footer__marquee marquee" data-marquee data-speed="38.8" data-anchor="1" data-anchor-x="144" data-anchor-t="27.85" aria-hidden="true">
         <div class="marquee__track">
           <span><svg><use href="#i-dumbbell"/></svg></span><b>Recovery</b>
           <span><svg><use href="#i-dumbbell"/></svg></span><b>Motivation</b>
