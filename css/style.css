@@ -214,7 +214,9 @@ body::before {
   letter-spacing: .5px;
   color: var(--white);
 }
-.logo span { color: var(--accent); letter-spacing: -1.5px; }
+.logo > span { color: var(--accent); letter-spacing: -1.5px; }
+.logo b { font-weight: inherit; }
+.kc { display: inline; }
 .nav__links {
   position: absolute;
   left: 181px;

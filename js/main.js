@@ -44,15 +44,34 @@
     const mode = el.dataset.split;
     const units = [];
     splitNode(el, mode, units);
-    // optional per-letter spacing fixes (px), measured against the reference
-    el.querySelectorAll("[data-kern]").forEach((line) => {
-      const k = line.dataset.kern.split(",").map(Number);
-      line.querySelectorAll(".split-u").forEach((u, i) => { if (k[i]) u.style.marginLeft = `${k[i]}px`; });
-    });
     // timings measured from the reference video
     const step = mode === "chars" ? 0.06 : 0.1;
     units.forEach((u, i) => { u.style.transitionDelay = `${(i * step).toFixed(3)}s`; });
   });
+
+  /* Per-letter spacing fixes (px) measured against the reference video.
+     Every non-space character of a [data-kern] element gets a margin. */
+  function applyKern(el) {
+    const k = el.dataset.kern.split(",").map(Number);
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    let i = 0;
+    nodes.forEach((node) => {
+      const frag = document.createDocumentFragment();
+      [...node.textContent].forEach((ch) => {
+        if (/\s/.test(ch)) { frag.appendChild(document.createTextNode(ch)); return; }
+        const span = document.createElement("span");
+        span.className = "kc";
+        span.textContent = ch;
+        if (k[i]) span.style.marginLeft = `${k[i]}px`;
+        i++;
+        frag.appendChild(span);
+      });
+      node.replaceWith(frag);
+    });
+  }
+  document.querySelectorAll("[data-kern]").forEach(applyKern);
 
   /* ---------------------------------------------------------
      2. Reveal on scroll
